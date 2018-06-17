@@ -53,10 +53,12 @@ function Circle(x,y,dx,dy,radius) {
   this.radius = radius;
 
   this.draw = function() {
+    let hue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
     c.beginPath();
-    c.strokeStyle="red";
+    c.strokeStyle=hue;
     c.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
     c.stroke();
+    
   };
 
   this.update = function(){
@@ -76,19 +78,25 @@ function Circle(x,y,dx,dy,radius) {
 
 }
 
-let x = Math.random() * innerWidth;
-let y = Math.random() * innerHeight;
-let dy = (Math.random() - 0.5) * 8;
-let dx = (Math.random() - 0.5) * 8;
-let radius = 30;
 
-var circle = new Circle(x,y,dx,dy,30);
 
+let circleArray = [];
+
+for(let i=0; i<500; i++){
+  let radius = 30;
+  let x = Math.random() * (innerWidth - radius*2) + radius;
+  let y = Math.random() * (innerHeight - radius * 2) + radius;
+  let dy = (Math.random() - 0.5) * 1;
+  let dx = (Math.random() - 0.5) * 1;
+
+  circleArray.push(new Circle(x,y,dx,dy,radius));
+
+}
 
 function animate(){
   requestAnimationFrame(animate);
   c.clearRect(0,0,innerWidth,innerHeight);
-  circle.update();
+  circleArray.forEach(circle=>circle.update());
 }
 
 animate();
