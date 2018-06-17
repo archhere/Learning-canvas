@@ -54,16 +54,14 @@ let mouse = {
 };
 
 let maxRadius = 20;
-let minRadius = 0.1;
+// let minRadius = 2;
 
 let colorArray = [
-  '#183e2c',
-  '#c60000',
-  '#d600ff',
-  '#ffb400',
-  '#ff0000',
-  '#0000ff',
-  'green',
+  '#120021',
+  '#340352',
+  '#732A70',
+  '#FF6EA7',
+  '#FFE15F',
 ];
 
 
@@ -72,12 +70,19 @@ window.addEventListener('mousemove',((event)=>{
   mouse.y = event.y;
 }));
 
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  init();
+});
+
 function Circle(x,y,dx,dy,radius) {
   this.x = x;
   this.y = y;
   this.dx = dx;
   this.dy = dy;
   this.radius = radius;
+  this.minRadius = radius;
   this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
 
 
@@ -85,6 +90,7 @@ function Circle(x,y,dx,dy,radius) {
     // let hue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
     c.beginPath();
     c.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
+    // c.strokeStyle = this.color;
     // c.stroke();
     c.fillStyle = this.color;
     c.fill();
@@ -107,7 +113,7 @@ function Circle(x,y,dx,dy,radius) {
     && mouse.y - this.y < 50 && mouse.y - this.y > -50 && this.radius < maxRadius) {
       this.radius += 1;
     }
-    else if (this.radius > minRadius) {
+    else if (this.radius > this.minRadius) {
       this.radius -= 1;
     }
 
@@ -116,21 +122,24 @@ function Circle(x,y,dx,dy,radius) {
 
 }
 
-
-
 let circleArray = [];
+const init = () => {
+  circleArray = [];
 
-for(let i=0; i<3000; i++){
-  let radius = 30;
-  let x = Math.random() * (innerWidth - radius*2) + radius;
-  let y = Math.random() * (innerHeight - radius * 2) + radius;
-  let dy = (Math.random() - 0.5) * 1;
-  let dx = (Math.random() - 0.5) * 1;
+  for(let i=0; i<3000; i++){
+    // let radius = 30;
+    let radius = Math.random() * 4 + 1;
+    let x = Math.random() * (innerWidth - radius*2) + radius;
+    let y = Math.random() * (innerHeight - radius * 2) + radius;
+    let dy = (Math.random() - 0.5) * 1;
+    let dx = (Math.random() - 0.5) * 1;
 
-  circleArray.push(new Circle(x,y,dx,dy,radius));
+    circleArray.push(new Circle(x,y,dx,dy,radius));
 
-}
+  }
+};
 
+init();
 function animate(){
   requestAnimationFrame(animate);
   c.clearRect(0,0,innerWidth,innerHeight);
