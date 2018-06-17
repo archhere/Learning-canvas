@@ -45,20 +45,49 @@ var c = canvas.getContext('2d');
 //   c.arc(x,y,30,0,2 * Math.PI,false);
 //   c.stroke();
 // }
+
+
+
+let mouse = {
+  x: undefined,
+  y: undefined
+};
+
+let maxRadius = 20;
+let minRadius = 0.1;
+
+let colorArray = [
+  '#183e2c',
+  '#c60000',
+  '#d600ff',
+  '#ffb400',
+  '#ff0000',
+  '#0000ff',
+  'green',
+];
+
+
+window.addEventListener('mousemove',((event)=>{
+  mouse.x = event.x;
+  mouse.y = event.y;
+}));
+
 function Circle(x,y,dx,dy,radius) {
   this.x = x;
   this.y = y;
   this.dx = dx;
   this.dy = dy;
   this.radius = radius;
+  this.color = colorArray[Math.floor(Math.random() * colorArray.length)];
+
 
   this.draw = function() {
-    let hue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+    // let hue = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
     c.beginPath();
-    c.strokeStyle=hue;
     c.arc(this.x,this.y,this.radius,0,2*Math.PI,false);
-    c.stroke();
-    
+    // c.stroke();
+    c.fillStyle = this.color;
+    c.fill();
   };
 
   this.update = function(){
@@ -73,6 +102,15 @@ function Circle(x,y,dx,dy,radius) {
     this.x += this.dx;
     this.y += this.dy;
 
+
+    if (mouse.x - this.x < 50 && mouse.x - this.x > -50
+    && mouse.y - this.y < 50 && mouse.y - this.y > -50 && this.radius < maxRadius) {
+      this.radius += 1;
+    }
+    else if (this.radius > minRadius) {
+      this.radius -= 1;
+    }
+
     this.draw();
   };
 
@@ -82,7 +120,7 @@ function Circle(x,y,dx,dy,radius) {
 
 let circleArray = [];
 
-for(let i=0; i<500; i++){
+for(let i=0; i<3000; i++){
   let radius = 30;
   let x = Math.random() * (innerWidth - radius*2) + radius;
   let y = Math.random() * (innerHeight - radius * 2) + radius;
